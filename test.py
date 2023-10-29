@@ -1,7 +1,7 @@
-from main import count_letters
-from main import fetch_data
-from main import drop_tables
-from main import create_database
+from tests import count_letters
+from tests import fetch_data
+from tests import drop_tables
+from tests import create_database
 
 def test_count_letters():
     assert count_letters('hello') == {'h': 1, 'e': 1, 'l': 2, 'o': 1}
