@@ -37,6 +37,9 @@ def drop_tables():
         c.execute('''DROP TABLE IF EXISTS users''')
         c.execute('''DROP TABLE IF EXISTS posts''')
         c.execute('''DROP TABLE IF EXISTS comments''')
+        # Check if tables were dropped
+        c.execute('''SELECT name FROM sqlite_master WHERE type='table' ORDER BY name''')
+        return c.fetchall()
 
 def create_database():
     with sqlite3.connect('database.db') as conn:
@@ -46,6 +49,10 @@ def create_database():
         c.execute('''CREATE TABLE users (id INTEGER PRIMARY KEY, name text, username text, email text, address_street text, address_suite text, address_city text, address_zipcode text, address_geo_lat real, address_geo_lng real, phone text, website text, company_name text, company_catchPhrase text, company_bs text)''')
         c.execute('''CREATE TABLE posts (id INTEGER PRIMARY KEY, userId INTEGER, title TEXT, body TEXT, FOREIGN KEY (userId) REFERENCES users(id))''')
         c.execute('''CREATE TABLE comments (id INTEGER PRIMARY KEY, postId INTEGER, name TEXT, email TEXT, body TEXT, FOREIGN KEY (postId) REFERENCES posts(id))''')
+
+        # Check if tables were created
+        c.execute('''SELECT name FROM sqlite_master WHERE type='table' ORDER BY name''')
+        return c.fetchall()
 
 def fill_database():
     with sqlite3.connect('database.db') as conn:
