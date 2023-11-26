@@ -1,4 +1,4 @@
-# API Tests
+# API Tests [![Python application](https://github.com/FilipParyz/API-Tests/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/FilipParyz/API-Tests/actions/workflows/python-app.yml)
 ## Description
 This is a test project for API testing using Python and requests library.
 To visualize the data, the library matplotlib was used.
