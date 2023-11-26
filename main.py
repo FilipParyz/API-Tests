@@ -62,20 +62,46 @@ def fill_database():
         jsonValue = fetch_data('https://jsonplaceholder.typicode.com/users/')
         if jsonValue:
             for element in jsonValue:
-                c.execute(f'''INSERT INTO users (name, username, email, address_street, address_suite, address_city, address_zipcode, address_geo_lat, address_geo_lng, phone, website, company_name, company_catchPhrase, company_bs)
-                VALUES ("{element['name']}", "{element['username']}", "{element['email']}", "{element['address']['street']}", "{element['address']['suite']}", "{element['address']['city']}", "{element['address']['zipcode']}", "{element['address']['geo']['lat']}", "{element['address']['geo']['lng']}", "{element['phone']}", "{element['website']}", "{element['company']['name']}", "{element['company']['catchPhrase']}", "{element['company']['bs']}")''')
+                c.execute(f'''INSERT INTO users (name,
+                                                username,
+                                                email,
+                                                address_street,
+                                                address_suite,
+                                                address_city,
+                                                address_zipcode,
+                                                address_geo_lat,
+                                                address_geo_lng,
+                                                phone,
+                                                website,
+                                                company_name,
+                                                company_catchPhrase,
+                                                company_bs)
+                                        VALUES ("{element["name"]}",
+                                                "{element["username"]}",
+                                                "{element["email"]}",
+                                                "{element["address"]["street"]}",
+                                                "{element["address"]["suite"]}",
+                                                "{element["address"]["city"]}",
+                                                "{element["address"]["zipcode"]}",
+                                                "{element["address"]["geo"]["lat"]}",
+                                                "{element["address"]["geo"]["lng"]}",
+                                                "{element["phone"]}",
+                                                "{element["website"]}",
+                                                "{element["company"]["name"]}",
+                                                "{element["company"]["catchPhrase"]}",
+                                                "{element["company"]["bs"]}")''')
 
         jsonValue = fetch_data('https://jsonplaceholder.typicode.com/posts/')
         if jsonValue:
             for element in jsonValue:
                 c.execute(f'''INSERT INTO posts (userId, title, body)
-                VALUES ("{element['userId']}", "{element['title']}", "{element['body']}")''')
+                VALUES ("{element["userId"]}", "{element["title"]}", "{element["body"]}")''')
 
         jsonValue = fetch_data('https://jsonplaceholder.typicode.com/comments/')
         if jsonValue:
             for element in jsonValue:
                 c.execute(f'''INSERT INTO comments (postId, name, email, body)
-                VALUES ("{element['postId']}", "{element['name']}", "{element['email']}", "{element['body']}")''')
+                VALUES ("{element["postId"]}", "{element["name"]}", "{element["email"]}", "{element["body"]}")''')
 
 def download_file(url, file_name):
     try:
@@ -113,7 +139,7 @@ if __name__ == '__main__':
     if jsonValue:
         output = ""
         for element in jsonValue:
-            output+= element['body']
+            output+= element["body"]
         letter_count = count_letters(output)
 
     generate_graph_of_occurances(letter_count)
