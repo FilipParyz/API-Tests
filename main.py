@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import requests
 import json
 import sqlite3
+from fake_useragent import UserAgent
 
 def fetch_data(link):
     response = requests.get(link)
@@ -76,6 +77,35 @@ def fill_database():
                 c.execute(f'''INSERT INTO comments (postId, name, email, body)
                 VALUES ("{element['postId']}", "{element['name']}", "{element['email']}", "{element['body']}")''')
 
+def download_file(url, file_name):
+    try:
+        ua_str = UserAgent().chrome
+        response = requests.get(url, allow_redirects=True, headers={"User-Agent": ua_str})
+        with open(file_name, "wb") as file:
+            file.write(response.content)
+        return True
+    except:
+        return False
+
+def prepare_data(data, period):
+    data = data.split("\n")
+    data = data[-period:-1]
+    data = [float(row.split(",")[-2]) for row in data]
+    return data
+
+def calculate_simple_moving_average(data):
+    period = len(data)
+    sma = sum(data)/period
+    return sma
+
+def calculate_expontential_moving_average(data):
+    period = len(data)
+    ema = []
+    ema.append(sum(data)/period)
+    multiplier = 2/(period+1)
+    for i in range(0, period):
+        ema.append((data[i]-ema[i-1])*multiplier+ema[i-1])
+    return ema
 
 if __name__ == '__main__':
     jsonValue = fetch_data('https://jsonplaceholder.typicode.com/posts/')
@@ -93,3 +123,16 @@ if __name__ == '__main__':
     create_database()
     fill_database()
     print("Database created and filled with data")
+
+    success = download_file("https://query1.finance.yahoo.com/v7/finance/download/BTC-USD?period1=1669408234&period2=1700944234&interval=1d&events=history&includeAdjustedClose=true", "BTC-USD.csv")
+    if success:
+        with open("BTC-USD.csv", "r") as file:
+            data = file.read()
+
+        data = prepare_data(data, 8)
+        sma_results = calculate_simple_moving_average(data)
+        ema_results = calculate_expontential_moving_average(data)
+        print("SMA: ", sma_results)
+        print("EMA: ", ema_results)
+    else:
+        print("Failed to download file.")
